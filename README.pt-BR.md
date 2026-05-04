@@ -20,77 +20,110 @@ Linter não pega isso. Linter checa sintaxe e estilo, não se a IA fez o que voc
 
 ## O que o vibecodefriendly faz
 
-Ele roda depois da IA escrever código e responde duas perguntas, em linguagem humana:
+Rode `vcf review` depois da IA escrever código. Ele responde duas perguntas, em linguagem humana:
 
-1. **A IA continuou no escopo do que você pediu, ou começou a fazer coisa tangencial?** — *detecção de desvio (drift)*
-2. **Tem padrão estranho ou abstração desnecessária no que ela escreveu?** — *sanity check*
+1. **Tem padrão estranho ou abstração desnecessária no que ela escreveu?** — *sanity check*
+2. **A IA mudou mais coisa do que você pediu?** — *detecção de intenção*
 
-As mensagens são amigáveis, sem jargão. Zero config — o `vcf init` lê seu projeto e descobre as regras sozinho. Nenhum JSON pra editar.
+As mensagens são legíveis, sem jargão de linter. Use no terminal, no CI ou via API programática. Zero config — nenhum JSON pra editar.
 
-## Como vai ser
+## Instalação
 
-> A ferramenta está em pré-release (veja [Status](#status)). Os exemplos abaixo são mockups da UX planejada.
-
-### 1. Detecção de desvio — "você pediu X, a IA fez Y"
-
-```
-$ vcf check
-
-Você pediu: "adiciona botão de logout no header"
-
-O que a IA fez:
-  ✓ Adicionou botão no Header.tsx — combina com seu pedido
-  ⚠ Refatorou AuthContext.tsx (62 linhas mudadas)
-  ⚠ Criou hooks/useSession.ts (arquivo novo)
-  ⚠ Mudou middleware/auth.ts (lógica de redirect)
-
-3 dessas mudanças não foram pedidas.
-Costuma vir junto com bugs sutis. Quer revisar antes de continuar?
-
-  [r] Revisar arquivo por arquivo
-  [a] Aceitar tudo (não recomendado)
-  [d] Pedir pra IA desfazer as mudanças extras
+```bash
+npm install -g vibecodefriendly
 ```
 
-### 2. Sanity check — padrões que doem depois
+## Uso
 
-```
-$ vcf check
+```bash
+# Revisar um arquivo
+vcf review src/auth/login.ts
 
-Encontrei 2 padrões que costumam virar dor de cabeça:
+# Revisar código inline
+vcf review --input "var x = 1; debugger;"
 
-  src/domain/Order.ts
-    Esse arquivo de regra de negócio está chamando o banco direto.
-    Você sente isso no dia que troca de banco, ou quando quer
-    testar sem subir Postgres. Sugestão: pedir pra IA mover essa
-    chamada pra um repositório.
+# Pipe via stdin
+cat meuArquivo.ts | vcf review
 
-  src/components/Dashboard.tsx (487 linhas)
-    Esse componente cresceu demais. Quando passa de ~350 linhas, a
-    IA começa a errar mais ao editar — perde contexto. Sugestão:
-    pedir pra ela quebrar em partes.
+# Modo CI — sai com código 1 em risco médio ou alto
+vcf review src/auth/login.ts --ci
 
-Quer que eu peça pra IA arrumar agora? [s/N]
+# Saída JSON (para integração com ferramentas)
+vcf review src/auth/login.ts --format json
 ```
 
-### 3. Init zero-config — nenhum JSON pra editar
+## Como parece na prática
 
 ```
-$ vcf init
+$ vcf review src/auth/login.ts
 
-Vou olhar seu projeto e sugerir umas regras...
+Score: 4.2/10
+Risk: HIGH ❌
+❌ High risk: 2 critical issues detected. Not safe for production.
 
-  ✓ Detectei: Next.js 14 + TypeScript + Prisma
-  ✓ Padrão típico desse stack: separar app/, lib/, components/
+Issues: 2 high, 3 medium, 1 low
 
-Pronto. Toda vez que a IA gerar código, rode:
+[HIGH]   [bug]   (line 12) Empty catch block silently swallows errors.
+[HIGH]   [bug]   (line 34) debugger statement found — remove before shipping.
+[MEDIUM] [smell] (line 8)  Function has too many parameters (6). Consider using an object.
+[MEDIUM] [smell] (line 1)  Low cohesion in "handleLogin": mixes HTTP, database, logging.
+[MEDIUM] [smell] (line 1)  Avoid var — use const or let instead.
+[LOW]    [smell] (line 1)  Avoid console statements in production code.
 
-  vcf check
+By category:
+  SECURITY (1)
+    [high] debugger statement found — remove before shipping.
+  DESIGN (3)
+    [high] Empty catch block silently swallows errors.
+    [medium] Function has too many parameters (6).
+  ARCHITECTURE (1)
+    [medium] Low cohesion in "handleLogin": mixes HTTP, database, logging.
+  STYLE (2)
+    [medium] Avoid var — use const or let instead.
+    [low] Avoid console statements in production code.
 
-E eu te digo se ela ficou no escopo ou se começou a fazer coisa
-que você não pediu.
+Suggestions:
+- Handle errors meaningfully or rethrow them.
+- Remove all debugger statements before shipping to production.
+- Use an object parameter or split the function into smaller pieces.
+- Split into smaller, focused functions with a single responsibility.
+```
 
-(zero arquivo de config pra editar — confia)
+## Regras
+
+13 regras em 5 categorias, desenhadas especificamente para código gerado por IA:
+
+| Categoria | Regras |
+|---|---|
+| **security** | `no-debugger` |
+| **design** | `shallow-error-handling`, `function-too-long`, `too-many-params`, `overengineering-detection`, `duplicate-code`, `defensive-overkill` |
+| **architecture** | `low-cohesion`, `multiple-responsibilities`, `file-too-large` |
+| **intent** | `unexpected-refactor` |
+| **style** | `no-console`, `no-var` |
+
+### Regras de intenção — o diferencial
+
+Regras como `unexpected-refactor` não sinalizam código ruim — elas sinalizam **mudanças não solicitadas**. Se a IA renomeou 6+ identificadores ou adicionou 4+ re-exports que você não pediu, isso é violação de escopo, não bug de código.
+
+Para excluir um arquivo da checagem de intenção, adicione um comentário:
+
+```ts
+// vcf: allow-refactor
+```
+
+## API programática
+
+```ts
+import { reviewCode } from "vibecodefriendly";
+
+const result = reviewCode(code);
+// { score, risk, issues, suggestions, warnings }
+
+// Com opções
+const result = reviewCode(code, {
+  tier: "free",                       // "free" | "pro" | "all"
+  excludeRuleIds: ["no-console"],
+});
 ```
 
 ## E como isso é diferente de um linter?
@@ -101,11 +134,11 @@ Linter checa se seu código segue regras *que você já escreveu*. O vibecodefri
 
 ## Status
 
-**Pré-release.** A Fase 1 é testar a ideia antes de eu queimar semanas implementando.
+**Alpha.** O engine central e o CLI estão funcionando. Adicionando regras e melhorando o output ativamente.
 
-**Curtiu a ideia? Dê uma star no repo pra acompanhar.** Star é o único sinal que eu tenho nessa fase — é o que me diz se vale continuar. Quando a ferramenta estiver pronta, o primeiro release sai aqui.
+**Curtiu a ideia? Dê uma star no repo pra acompanhar.** Stars me dizem se vale continuar e ajudam outras pessoas a encontrar o projeto.
 
-Tem alguma história de IA fazendo demais, ou feedback no pitch acima? [Abre uma issue](https://github.com/DykstraBruno/vibecodefriendly/issues) — quero ouvir.
+Tem um padrão que a IA fica gerando e deveria ser detectado? [Abre uma issue](https://github.com/DykstraBruno/vibecodefriendly/issues) — sugestões de regras são bem-vindas.
 
 ## Quem está construindo
 

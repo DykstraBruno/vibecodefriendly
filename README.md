@@ -20,76 +20,110 @@ Linters won't catch this. They check syntax and style, not whether the AI stayed
 
 ## What vibecodefriendly does
 
-It runs after the AI writes code and answers two questions in plain English:
+Run `vcf review` after the AI writes code. It answers two questions in plain English:
 
-1. **Did the AI stay in scope, or did it wander off?** — *drift detection*
-2. **Are there sketchy patterns or unnecessary abstractions in what it wrote?** — *sanity check*
+1. **Are there sketchy or dangerous patterns in what it wrote?** — *sanity check*
+2. **Did the AI change more than you asked for?** — *intent detection*
 
-Messages are friendly, not jargon-y. Zero config — `vcf init` reads your project and figures out the rules itself. No JSON files to babysit.
+Messages are human-readable, not linter jargon. Pipe it into CI, use it in the terminal, or call it programmatically. Zero config — no JSON files.
+
+## Install
+
+```bash
+npm install -g vibecodefriendly
+```
+
+## Usage
+
+```bash
+# Review a file
+vcf review src/auth/login.ts
+
+# Review inline code
+vcf review --input "var x = 1; debugger;"
+
+# Pipe from stdin
+cat myFile.ts | vcf review
+
+# CI mode — exits 1 on medium or high risk
+vcf review src/auth/login.ts --ci
+
+# JSON output (for tooling integration)
+vcf review src/auth/login.ts --format json
+```
 
 ## What it looks like
 
-> The tool is in pre-release (see [Status](#status)). These are mockups of the planned UX.
-
-### 1. Drift detection — "you asked for X, the AI did Y"
-
 ```
-$ vcf check
+$ vcf review src/auth/login.ts
 
-You asked: "add a logout button to the header"
+Score: 4.2/10
+Risk: HIGH ❌
+❌ High risk: 2 critical issues detected. Not safe for production.
 
-What the AI did:
-  ✓ Added logout button to Header.tsx — matches your ask
-  ⚠ Refactored AuthContext.tsx (62 lines changed)
-  ⚠ Created hooks/useSession.ts (new file)
-  ⚠ Modified middleware/auth.ts (redirect logic)
+Issues: 2 high, 3 medium, 1 low
 
-3 of these weren't part of what you asked for.
-This is where subtle bugs show up. Want to review before continuing?
+[HIGH]   [bug]   (line 12) Empty catch block silently swallows errors.
+[HIGH]   [bug]   (line 34) debugger statement found — remove before shipping.
+[MEDIUM] [smell] (line 8)  Function has too many parameters (6). Consider using an object.
+[MEDIUM] [smell] (line 1)  Low cohesion in "handleLogin": mixes HTTP, database, logging.
+[MEDIUM] [smell] (line 1)  Avoid var — use const or let instead.
+[LOW]    [smell] (line 1)  Avoid console statements in production code.
 
-  [r] Review file by file
-  [a] Accept everything (not recommended)
-  [u] Ask the AI to undo the extras
-```
+By category:
+  SECURITY (1)
+    [high] debugger statement found — remove before shipping.
+  DESIGN (3)
+    [high] Empty catch block silently swallows errors.
+    [medium] Function has too many parameters (6).
+  ARCHITECTURE (1)
+    [medium] Low cohesion in "handleLogin": mixes HTTP, database, logging.
+  STYLE (2)
+    [medium] Avoid var — use const or let instead.
+    [low] Avoid console statements in production code.
 
-### 2. Sanity check — patterns that bite later
-
-```
-$ vcf check
-
-Found 2 patterns that usually become headaches later:
-
-  src/domain/Order.ts
-    This business-rule file is calling the database directly. You'll
-    feel it the day you swap databases or want to test without
-    spinning up Postgres. Suggestion: ask the AI to move that call
-    into a repository.
-
-  src/components/Dashboard.tsx (487 lines)
-    This component grew big. Past ~350 lines, AIs start making more
-    mistakes when editing — they lose context. Suggestion: ask the
-    AI to split it into pieces.
-
-Want me to ask the AI to fix these now? [y/N]
+Suggestions:
+- Handle errors meaningfully or rethrow them.
+- Remove all debugger statements before shipping to production.
+- Use an object parameter or split the function into smaller pieces.
+- Split into smaller, focused functions with a single responsibility.
 ```
 
-### 3. Zero-config init — no JSON to edit
+## Rules
 
+13 rules across 5 categories, designed specifically for AI-generated code:
+
+| Category | Rules |
+|---|---|
+| **security** | `no-debugger` |
+| **design** | `shallow-error-handling`, `function-too-long`, `too-many-params`, `overengineering-detection`, `duplicate-code`, `defensive-overkill` |
+| **architecture** | `low-cohesion`, `multiple-responsibilities`, `file-too-large` |
+| **intent** | `unexpected-refactor` |
+| **style** | `no-console`, `no-var` |
+
+### Intent rules — the differentiator
+
+Rules like `unexpected-refactor` don't flag bad code — they flag **unwanted changes**. If the AI renamed 6+ identifiers or added 4+ barrel re-exports you didn't ask for, that's a scope violation, not a bug.
+
+Opt a file out of intent checking with a comment:
+
+```ts
+// vcf: allow-refactor
 ```
-$ vcf init
 
-Looking at your project to figure out sensible rules...
+## Programmatic API
 
-  ✓ Detected: Next.js 14 + TypeScript + Prisma
-  ✓ Typical pattern for this stack: separate app/, lib/, components/
+```ts
+import { reviewCode } from "vibecodefriendly";
 
-Done. Whenever the AI writes code, run:
+const result = reviewCode(code);
+// { score, risk, issues, suggestions, warnings }
 
-  vcf check
-
-And I'll tell you if it stayed in scope or wandered off.
-
-(zero config files to edit — trust me)
+// With options
+const result = reviewCode(code, {
+  tier: "free",                       // "free" | "pro" | "all"
+  excludeRuleIds: ["no-console"],
+});
 ```
 
 ## How is this different from a linter?
@@ -100,11 +134,11 @@ It's a second opinion on the AI's output, not a style enforcer.
 
 ## Status
 
-**Pre-release.** Phase 1 is testing the idea before I burn weeks building it.
+**Alpha.** The core engine and CLI are working. Actively adding rules and improving output.
 
-**Like the idea? Star this repo to follow along.** Stars are the only signal I have at this stage — they tell me whether to keep going. When the tool is ready, the first release ships here.
+**Like the idea? Star this repo to follow along.** Stars tell me whether to keep going and help others find it.
 
-Got a war story about the AI doing too much, or feedback on the pitch above? [Open an issue](https://github.com/DykstraBruno/vibecodefriendly/issues) — I want to hear it.
+Got a pattern the AI keeps producing that should be flagged? [Open an issue](https://github.com/DykstraBruno/vibecodefriendly/issues) — rule suggestions welcome.
 
 ## Who's building this
 
