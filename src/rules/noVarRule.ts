@@ -7,7 +7,7 @@ export const noVarRule: Rule = {
   suggestion: "Replace var with const (preferred) or let to use block-scoped declarations.",
   category: "style",
   severity: "medium",
-  tier: "free",
+  capability: "core",
   tags: ["style", "modern-javascript"],
   run({ lines }): Issue[] {
     const issues: Issue[] = [];

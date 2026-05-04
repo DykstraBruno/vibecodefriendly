@@ -8,7 +8,7 @@ export const fileTooLargeRule: Rule = {
   suggestion: "Break this file into smaller modules and submit smaller, focused PRs.",
   category: "architecture",
   severity: "medium",
-  tier: "pro",
+  capability: "advanced",
   tags: ["architecture", "maintainability"],
   run({ lines }): Issue[] {
     const lineCount = lines.length;

@@ -7,7 +7,7 @@ export const noDebuggerRule: Rule = {
   suggestion: "Remove all debugger statements before shipping to production.",
   category: "security",
   severity: "high",
-  tier: "free",
+  capability: "core",
   tags: ["security", "production-readiness"],
   run({ lines }): Issue[] {
     const issues: Issue[] = [];

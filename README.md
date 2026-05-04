@@ -25,7 +25,7 @@ Run `vcf review` after the AI writes code. It answers two questions in plain Eng
 1. **Are there sketchy or dangerous patterns in what it wrote?** — *sanity check*
 2. **Did the AI change more than you asked for?** — *intent detection*
 
-Messages are human-readable, not linter jargon. Pipe it into CI, use it in the terminal, or call it programmatically. Zero config — no JSON files.
+Messages are human-readable, not linter jargon. Pipe it into CI or use it in the terminal. Zero config — no JSON files.
 
 ## Install
 
@@ -111,7 +111,7 @@ Opt a file out of intent checking with a comment:
 // vcf: allow-refactor
 ```
 
-## Programmatic API
+## Node.js usage
 
 ```ts
 import { reviewCode } from "vibecodefriendly";
@@ -121,7 +121,6 @@ const result = reviewCode(code);
 
 // With options
 const result = reviewCode(code, {
-  tier: "free",                       // "free" | "pro" | "all"
   excludeRuleIds: ["no-console"],
 });
 ```

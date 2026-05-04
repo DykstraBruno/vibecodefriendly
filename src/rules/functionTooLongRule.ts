@@ -12,7 +12,7 @@ export const functionTooLongRule: Rule = {
   suggestion: "Split this function into smaller, reusable pieces.",
   category: "design",
   severity: "medium",
-  tier: "free",
+  capability: "core",
   tags: ["complexity", "maintainability"],
   run({ lines }): Issue[] {
     const issues: Issue[] = [];

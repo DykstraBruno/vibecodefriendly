@@ -15,7 +15,7 @@ export const defensiveOverkillRule: Rule = {
   suggestion: "Simplify defensive logic or validate input at the boundary (function entry) instead.",
   category: "design",
   severity: "low",
-  tier: "pro",
+  capability: "advanced",
   tags: ["overengineering", "validation"],
   run({ lines }): Issue[] {
     const issues: Issue[] = [];

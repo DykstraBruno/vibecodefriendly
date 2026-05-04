@@ -13,7 +13,7 @@ export const shallowErrorHandlingRule: Rule = {
   suggestion: "Handle errors meaningfully or rethrow them.",
   category: "design",
   severity: "high",
-  tier: "free",
+  capability: "core",
   tags: ["error-handling", "reliability"],
   run({ lines }): Issue[] {
     const issues: Issue[] = [];

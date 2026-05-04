@@ -17,7 +17,7 @@ export const overengineeringDetectionRule: Rule = {
   suggestion: "Simplify the implementation. Prefer direct solutions over unnecessary abstractions.",
   category: "design",
   severity: "medium",
-  tier: "pro",
+  capability: "advanced",
   tags: ["overengineering", "ai-generated-code"],
   run({ code, lines }): Issue[] {
     const issues: Issue[] = [];

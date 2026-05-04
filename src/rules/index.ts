@@ -1,4 +1,4 @@
-import type { FeatureTier, Rule, RuleCategory } from "../types/index";
+import type { Rule, RuleCapability, RuleCategory } from "../types/index";
 import { consoleLogRule } from "./consoleLogRule";
 import { noVarRule } from "./noVarRule";
 import { noDebuggerRule } from "./noDebuggerRule";
@@ -37,6 +37,6 @@ export function getRulesByCategory(category: RuleCategory): Rule[] {
   return rules.filter((r) => r.category === category);
 }
 
-export function getRulesByTier(tier: FeatureTier): Rule[] {
-  return rules.filter((r) => r.tier === tier);
+export function getRulesByCapability(capability: RuleCapability): Rule[] {
+  return rules.filter((r) => r.capability === capability);
 }

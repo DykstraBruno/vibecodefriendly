@@ -30,7 +30,7 @@ export const tooManyParamsRule: Rule = {
   suggestion: "Use an object parameter or split the function into smaller pieces.",
   category: "design",
   severity: "medium",
-  tier: "free",
+  capability: "core",
   tags: ["api-design", "maintainability"],
   run({ code, lines }): Issue[] {
     const issues: Issue[] = [];

@@ -21,7 +21,7 @@ export const multipleResponsibilitiesRule: Rule = {
   suggestion: "Separate concerns: keep validation, business logic, and I/O in distinct functions.",
   category: "architecture",
   severity: "medium",
-  tier: "pro",
+  capability: "advanced",
   tags: ["architecture", "srp"],
   run({ lines }): Issue[] {
     const issues: Issue[] = [];

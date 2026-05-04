@@ -1,4 +1,4 @@
-export const API_VERSION = "v1";
+export const SDK_VERSION = "v1";
 
 export {
   reviewCode,
@@ -18,14 +18,14 @@ export {
 export { rules } from "../rules/index";
 
 export type {
-  FeatureTier,
   Issue,
   ReviewOptions,
   ReviewResult,
   Rule,
+  RuleCapability,
   RuleCategory,
   RuleContext,
   RuleSelection,
-  RuleSelectionTier,
+  RuleSelectionCapability,
   Severity,
 } from "../types/index";

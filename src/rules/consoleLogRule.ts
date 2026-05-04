@@ -7,7 +7,7 @@ export const consoleLogRule: Rule = {
   suggestion: "Remove console statements or replace with a proper logging library.",
   category: "style",
   severity: "low",
-  tier: "free",
+  capability: "core",
   tags: ["style", "production-readiness"],
   run({ lines }): Issue[] {
     const issues: Issue[] = [];

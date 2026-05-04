@@ -7,7 +7,7 @@ export type RuleCategory =
 
 export type Severity = "low" | "medium" | "high";
 export type IssueType = "bug" | "smell";
-export type FeatureTier = "free" | "pro";
+export type RuleCapability = "core" | "advanced";
 
 export type Issue = {
   ruleId: string;
@@ -28,10 +28,10 @@ export type ReviewResult = {
   warnings: string[];
 };
 
-export type RuleSelectionTier = FeatureTier | "all";
+export type RuleSelectionCapability = RuleCapability | "all";
 
 export type RuleSelection = {
-  tier?: RuleSelectionTier;
+  capability?: RuleSelectionCapability;
   includeRuleIds?: string[];
   excludeRuleIds?: string[];
 };
@@ -51,7 +51,7 @@ export type Rule = {
   suggestion: string;
   category: RuleCategory;
   severity: Severity;
-  tier: FeatureTier;
+  capability: RuleCapability;
   tags: string[];
   supportsAutofix?: boolean;
   run: (ctx: RuleContext) => Issue[];

@@ -51,7 +51,7 @@ export const duplicateCodeRule: Rule = {
   suggestion: "Extract reusable functions to eliminate code duplication.",
   category: "design",
   severity: "medium",
-  tier: "pro",
+  capability: "advanced",
   tags: ["duplication", "maintainability"],
   run({ lines }): Issue[] {
     const issues: Issue[] = [];

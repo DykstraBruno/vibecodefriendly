@@ -25,7 +25,7 @@ Rode `vcf review` depois da IA escrever código. Ele responde duas perguntas, em
 1. **Tem padrão estranho ou abstração desnecessária no que ela escreveu?** — *sanity check*
 2. **A IA mudou mais coisa do que você pediu?** — *detecção de intenção*
 
-As mensagens são legíveis, sem jargão de linter. Use no terminal, no CI ou via API programática. Zero config — nenhum JSON pra editar.
+As mensagens são legíveis, sem jargão de linter. Use no terminal ou no CI. Zero config — nenhum JSON pra editar.
 
 ## Instalação
 
@@ -111,7 +111,7 @@ Para excluir um arquivo da checagem de intenção, adicione um comentário:
 // vcf: allow-refactor
 ```
 
-## API programática
+## Uso com Node.js
 
 ```ts
 import { reviewCode } from "vibecodefriendly";
@@ -121,7 +121,6 @@ const result = reviewCode(code);
 
 // Com opções
 const result = reviewCode(code, {
-  tier: "free",                       // "free" | "pro" | "all"
   excludeRuleIds: ["no-console"],
 });
 ```

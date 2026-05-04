@@ -17,7 +17,7 @@ export const unexpectedRefactorRule: Rule = {
   suggestion: "Avoid refactoring unless explicitly required. Keep structural changes separate from functional ones.",
   category: "intent",
   severity: "medium",
-  tier: "pro",
+  capability: "advanced",
   tags: ["refactor-detection", "ai-generated-code"],
   run({ code, lines }): Issue[] {
     // Allow-list: file opts out via comment annotation

@@ -1,2 +1,1 @@
-// Entry point — delegates to the CLI layer.
-import "./cli/index";
+export * from "./sdk/v1";

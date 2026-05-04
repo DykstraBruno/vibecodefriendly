@@ -22,7 +22,7 @@ export const lowCohesionRule: Rule = {
   suggestion: "Split into smaller, focused functions with a single responsibility.",
   category: "architecture",
   severity: "medium",
-  tier: "pro",
+  capability: "advanced",
   tags: ["architecture", "cohesion"],
   run({ lines }): Issue[] {
     const issues: Issue[] = [];
