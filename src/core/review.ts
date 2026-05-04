@@ -1,20 +1,38 @@
-import type { ReviewResult } from "../types/index";
+import type { ReviewOptions, ReviewResult, RuleContext } from "../types/index";
+import { rules } from "../rules/index";
+import { parseCode } from "./codeParser";
+import { selectRules } from "./ruleRegistry";
+import { runRules } from "./ruleRunner";
+import { calculateScore } from "./scoring";
+import { calculateRisk } from "./risk";
+import { buildSuggestions } from "./suggestions";
+import { collectWarnings } from "./warnings";
 
-export type ReviewOptions = {
-  format: "json" | "text";
-  verbose: boolean;
-};
+export { runRules } from "./ruleRunner";
+export { calculateScore } from "./scoring";
+export { calculateRisk } from "./risk";
+export { buildSuggestions } from "./suggestions";
+export { collectWarnings } from "./warnings";
 
 /**
- * Core review logic — not yet implemented.
- * Receives raw source code and returns a ReviewResult.
+ * Pure, synchronous function that analyses source code.
+ * Contains no CLI logic and produces no side-effects.
  */
-export async function review(
-  code: string,
-  options: ReviewOptions
-): Promise<ReviewResult> {
-  // TODO: implement review logic
-  void code;
-  void options;
-  return { issues: [] };
+export function reviewCode(code: string, options: ReviewOptions = {}): ReviewResult {
+  const parsed = parseCode(code);
+  const ctx: RuleContext = {
+    code: parsed.text,
+    lines: parsed.lines,
+  };
+  const activeRules = selectRules(options.rules ?? rules, options);
+  const issues = runRules(ctx, activeRules);
+  const score = calculateScore(issues);
+
+  return {
+    score,
+    risk: calculateRisk(issues, score),
+    issues,
+    suggestions: buildSuggestions(issues, activeRules),
+    warnings: collectWarnings(issues, activeRules),
+  };
 }
