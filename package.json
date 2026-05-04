@@ -1,0 +1,44 @@
+{
+  "name": "vibecodefriendly",
+  "version": "0.0.1",
+  "description": "A friendly guardrail for AI-generated code — drift detection and sanity checks in plain English, for vibe coders using Cursor, Claude Code, Copilot, and friends.",
+  "private": true,
+  "license": "MIT",
+  "author": {
+    "name": "Bruno Dykstra",
+    "email": "brunodykstra@gmail.com",
+    "url": "https://github.com/DykstraBruno"
+  },
+  "homepage": "https://github.com/DykstraBruno/vibecodefriendly#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DykstraBruno/vibecodefriendly.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DykstraBruno/vibecodefriendly/issues"
+  },
+  "bin": {
+    "vcf": "./bin/vcf.js"
+  },
+  "files": [
+    "bin",
+    "README.md",
+    "README.pt-BR.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "ai",
+    "ai-coding",
+    "vibe-coding",
+    "cursor",
+    "claude-code",
+    "copilot",
+    "code-review",
+    "drift-detection",
+    "guardrail",
+    "cli"
+  ]
+}
