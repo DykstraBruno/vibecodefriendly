@@ -1,6 +1,8 @@
 # vibecodefriendly
 
-> Você pediu pra IA um botão de logout. Recebeu um AuthContext refatorado, um hook de sessão novo e umas mudanças em middleware que você nunca pediu. O **vibecodefriendly** te avisa quando a IA saiu do roteiro — em português normal, sem jargão de linter.
+> **Mantém o vibe da sua IA.** Um guardrail amigável para código gerado por IA — detecção de desvio (drift) e sanity check em linguagem humana.
+
+Você pediu pra IA um botão de logout. Recebeu um AuthContext refatorado, um hook de sessão novo e umas mudanças em middleware que você nunca pediu. O **vibecodefriendly** te avisa quando a IA saiu do roteiro — sem o jargão de linter.
 
 Pra quem constrói com Cursor, Claude Code, GitHub Copilot, Replit Agent, v0, bolt.new, Lovable e cia.
 

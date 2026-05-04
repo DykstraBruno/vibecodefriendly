@@ -1,6 +1,8 @@
 # vibecodefriendly
 
-> You asked the AI for a logout button. You got a refactored auth context, a new session hook, and middleware changes you never asked for. **vibecodefriendly** tells you when the AI went off-script — in plain English, not linter jargon.
+> **Keep your AI in your vibe.** A friendly guardrail for AI-generated code — drift detection and sanity checks in plain English.
+
+You asked the AI for a logout button. You got a refactored auth context, a new session hook, and middleware changes you never asked for. **vibecodefriendly** tells you when the AI went off-script — without the linter jargon.
 
 For people who build with Cursor, Claude Code, GitHub Copilot, Replit Agent, v0, bolt.new, Lovable, and friends.
 
