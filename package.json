@@ -17,11 +17,20 @@
   "bugs": {
     "url": "https://github.com/DykstraBruno/vibecodefriendly/issues"
   },
+  "main": "dist/index.js",
   "bin": {
     "vcf": "./bin/vcf.js"
   },
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node src/index.ts",
+    "start": "node dist/index.js"
+  },
   "files": [
     "bin",
+    "dist",
+    "src",
+    "tsconfig.json",
     "README.md",
     "README.pt-BR.md",
     "LICENSE"
@@ -40,5 +49,13 @@
     "drift-detection",
     "guardrail",
     "cli"
-  ]
+  ],
+  "dependencies": {
+    "commander": "^14.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^6.0.3"
+  }
 }
