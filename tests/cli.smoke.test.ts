@@ -11,7 +11,7 @@ function runCli(args: string[], input?: string) {
 
 describe("CLI smoke tests", () => {
   beforeAll(() => {
-    const build = spawnSync("npm", ["run", "build"], {
+    const build = spawnSync("npm run build", {
       cwd: process.cwd(),
       encoding: "utf-8",
       shell: true,
