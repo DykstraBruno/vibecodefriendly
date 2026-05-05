@@ -55,29 +55,29 @@ vcf review src/auth/login.ts --format json
 ## What it looks like
 
 ```
-$ vcf review src/auth/login.ts
+$ vcf review tests/fixtures/mixed.ts
 
-Score: 4.2/10
+Score: 1.3/10
 Risk: HIGH ❌
 ❌ High risk: 2 critical issues detected. Not safe for production.
 
 Issues: 2 high, 3 medium, 1 low
 
-[HIGH]   [bug]   (line 12) Empty catch block silently swallows errors.
-[HIGH]   [bug]   (line 34) debugger statement found — remove before shipping.
-[MEDIUM] [smell] (line 8)  Function has too many parameters (6). Consider using an object.
-[MEDIUM] [smell] (line 1)  Low cohesion in "handleLogin": mixes HTTP, database, logging.
-[MEDIUM] [smell] (line 1)  Avoid var — use const or let instead.
-[LOW]    [smell] (line 1)  Avoid console statements in production code.
+[HIGH] [bug] (line 12) Empty catch block silently swallows errors.
+[HIGH] [bug] (line 34) debugger statement found — remove before shipping.
+[MEDIUM] [smell] (line 8) Low cohesion in "handleLogin": mixes HTTP, database, logging.
+[MEDIUM] [smell] (line 1) Avoid var — use const or let instead.
+[MEDIUM] [smell] (line 8) Function has too many parameters (6). Consider using an object or splitting the function.
+[LOW] [smell] (line 1) Avoid console statements in production code.
 
 By category:
   SECURITY (1)
     [high] debugger statement found — remove before shipping.
-  DESIGN (3)
-    [high] Empty catch block silently swallows errors.
-    [medium] Function has too many parameters (6).
   ARCHITECTURE (1)
     [medium] Low cohesion in "handleLogin": mixes HTTP, database, logging.
+  DESIGN (2)
+    [high] Empty catch block silently swallows errors.
+    [medium] Function has too many parameters (6). Consider using an object.
   STYLE (2)
     [medium] Avoid var — use const or let instead.
     [low] Avoid console statements in production code.
@@ -88,6 +88,8 @@ Suggestions:
 - Use an object parameter or split the function into smaller pieces.
 - Split into smaller, focused functions with a single responsibility.
 ```
+
+<!-- Output verified by: tests/fixture-baseline.test.ts -->
 
 ## Rules
 
@@ -103,7 +105,7 @@ Suggestions:
 
 ### Intent rules — the differentiator
 
-Rules like `unexpected-refactor` don't flag bad code — they flag **unwanted changes**. If the AI renamed 6+ identifiers or added 4+ barrel re-exports you didn't ask for, that's a scope violation, not a bug.
+Rules like `unexpected-refactor` don't flag bad code — they flag **unwanted changes**. If the AI renamed 6+ identifiers or added 5+ barrel re-exports you didn't ask for, that's a scope violation, not a bug.
 
 Opt a file out of intent checking with a comment:
 

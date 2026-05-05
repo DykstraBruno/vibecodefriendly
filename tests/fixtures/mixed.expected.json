@@ -1,0 +1,75 @@
+{
+  "score": 1.3,
+  "risk": "high",
+  "issues": [
+    {
+      "ruleId": "no-console",
+      "type": "smell",
+      "severity": "low",
+      "category": "style",
+      "message": "Avoid console statements in production code.",
+      "line": 1,
+      "lineContent": "var boot = console.log(\"boot\");"
+    },
+    {
+      "ruleId": "no-var",
+      "type": "smell",
+      "severity": "medium",
+      "category": "style",
+      "message": "Avoid var — use const or let instead.",
+      "line": 1,
+      "lineContent": "var boot = console.log(\"boot\");"
+    },
+    {
+      "ruleId": "no-debugger",
+      "type": "bug",
+      "severity": "high",
+      "category": "security",
+      "message": "debugger statement found — remove before shipping.",
+      "line": 34,
+      "lineContent": "debugger;"
+    },
+    {
+      "ruleId": "shallow-error-handling",
+      "type": "bug",
+      "severity": "high",
+      "category": "design",
+      "message": "Empty catch block silently swallows errors.",
+      "line": 12,
+      "lineContent": "} catch (err) {}"
+    },
+    {
+      "ruleId": "too-many-params",
+      "type": "smell",
+      "severity": "medium",
+      "category": "design",
+      "message": "Function has too many parameters (6). Consider using an object or splitting the function.",
+      "line": 8,
+      "lineContent": "function handleLogin(email, password, rememberMe, captcha, locale, timezone) {"
+    },
+    {
+      "ruleId": "low-cohesion",
+      "type": "smell",
+      "severity": "medium",
+      "category": "architecture",
+      "message": "Low cohesion in \"handleLogin\": mixes HTTP, database, logging.",
+      "line": 8,
+      "lineContent": "function handleLogin(email, password, rememberMe, captcha, locale, timezone) {"
+    }
+  ],
+  "suggestions": [
+    "Remove console statements or replace with a proper logging library.",
+    "Replace var with const (preferred) or let to use block-scoped declarations.",
+    "Remove all debugger statements before shipping to production.",
+    "Handle errors meaningfully or rethrow them.",
+    "Use an object parameter or split the function into smaller pieces.",
+    "Split into smaller, focused functions with a single responsibility."
+  ],
+  "warnings": [],
+  "summary": "❌ High risk: 2 critical issues detected. Not safe for production.",
+  "counts": {
+    "high": 2,
+    "medium": 3,
+    "low": 1
+  }
+}
