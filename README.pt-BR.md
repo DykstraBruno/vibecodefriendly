@@ -63,21 +63,21 @@ Risk: HIGH ❌
 
 Issues: 2 high, 3 medium, 1 low
 
-[HIGH]   [bug]   (line 12) Empty catch block silently swallows errors.
-[HIGH]   [bug]   (line 34) debugger statement found — remove before shipping.
-[MEDIUM] [smell] (line 8)  Function has too many parameters (6). Consider using an object.
-[MEDIUM] [smell] (line 1)  Low cohesion in "handleLogin": mixes HTTP, database, logging.
-[MEDIUM] [smell] (line 1)  Avoid var — use const or let instead.
-[LOW]    [smell] (line 1)  Avoid console statements in production code.
+[HIGH] [bug] (line 12) Empty catch block silently swallows errors.
+[HIGH] [bug] (line 34) debugger statement found — remove before shipping.
+[MEDIUM] [smell] (line 1) Low cohesion in "handleLogin": mixes HTTP, database, logging.
+[MEDIUM] [smell] (line 1) Avoid var — use const or let instead.
+[MEDIUM] [smell] (line 8) Function has too many parameters (6). Consider using an object.
+[LOW] [smell] (line 1) Avoid console statements in production code.
 
 By category:
   SECURITY (1)
     [high] debugger statement found — remove before shipping.
-  DESIGN (3)
-    [high] Empty catch block silently swallows errors.
-    [medium] Function has too many parameters (6).
   ARCHITECTURE (1)
     [medium] Low cohesion in "handleLogin": mixes HTTP, database, logging.
+  DESIGN (2)
+    [high] Empty catch block silently swallows errors.
+    [medium] Function has too many parameters (6). Consider using an object.
   STYLE (2)
     [medium] Avoid var — use const or let instead.
     [low] Avoid console statements in production code.
@@ -103,7 +103,7 @@ Suggestions:
 
 ### Regras de intenção — o diferencial
 
-Regras como `unexpected-refactor` não sinalizam código ruim — elas sinalizam **mudanças não solicitadas**. Se a IA renomeou 6+ identificadores ou adicionou 4+ re-exports que você não pediu, isso é violação de escopo, não bug de código.
+Regras como `unexpected-refactor` não sinalizam código ruim — elas sinalizam **mudanças não solicitadas**. Se a IA renomeou 6+ identificadores ou adicionou 5+ re-exports que você não pediu, isso é violação de escopo, não bug de código.
 
 Para excluir um arquivo da checagem de intenção, adicione um comentário:
 
