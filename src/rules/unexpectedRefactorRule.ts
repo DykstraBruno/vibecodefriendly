@@ -19,9 +19,9 @@ export const unexpectedRefactorRule: Rule = {
   severity: "medium",
   capability: "advanced",
   tags: ["refactor-detection", "ai-generated-code"],
-  run({ code, lines }): Issue[] {
+  run({ code, lines, rawCode }): Issue[] {
     // Allow-list: file opts out via comment annotation
-    if (/\/\/\s*vcf:\s*allow-refactor/.test(code) || /@vcf-ignore-refactor/.test(code)) {
+    if (/\/\/\s*vcf:\s*allow-refactor/.test(rawCode) || /@vcf-ignore-refactor/.test(rawCode)) {
       return [];
     }
 

@@ -1,11 +1,18 @@
+import { stripComments } from "../rules/helpers";
+
 export type ParsedCode = {
+  rawText: string;
+  rawLines: string[];
   text: string;
   lines: string[];
 };
 
 export function parseCode(code: string): ParsedCode {
+  const text = stripComments(code);
   return {
-    text: code,
-    lines: code.split("\n"),
+    rawText: code,
+    rawLines: code.split("\n"),
+    text,
+    lines: text.split("\n"),
   };
 }

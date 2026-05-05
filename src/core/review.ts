@@ -23,6 +23,8 @@ export function reviewCode(code: string, options: ReviewOptions = {}): ReviewRes
   const ctx: RuleContext = {
     code: parsed.text,
     lines: parsed.lines,
+    rawCode: parsed.rawText,
+    rawLines: parsed.rawLines,
   };
   const activeRules = selectRules(options.rules ?? rules, options);
   const issues = runRules(ctx, activeRules);

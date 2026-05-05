@@ -41,8 +41,14 @@ export type ReviewOptions = RuleSelection & {
 };
 
 export type RuleContext = {
+  /** Comment-stripped source. Default scan target for rules. */
   code: string;
+  /** Comment-stripped lines. Newlines preserved so line numbers stay accurate. */
   lines: string[];
+  /** Original source with comments. Use only when comments are semantically meaningful (e.g. opt-out markers). */
+  rawCode: string;
+  /** Original lines with comments. */
+  rawLines: string[];
 };
 
 export type Rule = {
