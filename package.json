@@ -1,6 +1,6 @@
 {
   "name": "vibecodefriendly",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A friendly guardrail for AI-generated code — drift detection and sanity checks in plain English, for vibe coders using Cursor, Claude Code, Copilot, and friends.",
   "license": "MIT",
   "author": {
@@ -39,8 +39,6 @@
   "files": [
     "bin",
     "dist",
-    "src",
-    "tsconfig.json",
     "README.md",
     "README.pt-BR.md",
     "LICENSE"
