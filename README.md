@@ -64,11 +64,17 @@ Risk: HIGH ❌
 Issues: 2 high, 3 medium, 1 low
 
 [HIGH] [bug] (line 12) Empty catch block silently swallows errors.
+  > } catch (err) {}
 [HIGH] [bug] (line 34) debugger statement found — remove before shipping.
-[MEDIUM] [smell] (line 8) Low cohesion in "handleLogin": mixes HTTP, database, logging.
+  > debugger;
 [MEDIUM] [smell] (line 1) Avoid var — use const or let instead.
+  > var boot = console.log("boot");
 [MEDIUM] [smell] (line 8) Function has too many parameters (6). Consider using an object or splitting the function.
+  > function handleLogin(email, password, rememberMe, captcha, locale, timezone) {
+[MEDIUM] [smell] (line 8) Low cohesion in "handleLogin": mixes HTTP, database, logging.
+  > function handleLogin(email, password, rememberMe, captcha, locale, timezone) {
 [LOW] [smell] (line 1) Avoid console statements in production code.
+  > var boot = console.log("boot");
 
 By category:
   SECURITY (1)
@@ -77,14 +83,16 @@ By category:
     [medium] Low cohesion in "handleLogin": mixes HTTP, database, logging.
   DESIGN (2)
     [high] Empty catch block silently swallows errors.
-    [medium] Function has too many parameters (6). Consider using an object.
+    [medium] Function has too many parameters (6). Consider using an object or splitting the function.
   STYLE (2)
     [medium] Avoid var — use const or let instead.
     [low] Avoid console statements in production code.
 
 Suggestions:
-- Handle errors meaningfully or rethrow them.
+- Remove console statements or replace with a proper logging library.
+- Replace var with const (preferred) or let to use block-scoped declarations.
 - Remove all debugger statements before shipping to production.
+- Handle errors meaningfully or rethrow them.
 - Use an object parameter or split the function into smaller pieces.
 - Split into smaller, focused functions with a single responsibility.
 ```
